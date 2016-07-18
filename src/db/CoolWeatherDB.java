@@ -7,6 +7,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 import model.City;
 import model.County;
 import model.Province;
@@ -50,7 +51,9 @@ public class CoolWeatherDB {
 		if (province != null) {
 			ContentValues values = new ContentValues();
 			values.put("province_name", province.getProvinceName());
+			Log.d("province1", province.getProvinceName());
 			values.put("province_code", province.getProvinceCode());
+			Log.d("province1", province.getProvinceCode());
 			db.insert("Province", null, values);
 		}
 	}
@@ -60,13 +63,17 @@ public class CoolWeatherDB {
 	 */
 	public List<Province> loadProvinces() {
 		List<Province> list = new ArrayList<Province>();
-		Cursor cursor = db.query("Province", null, null, null, null, null, null);
+//		Cursor cursor = db.query("Province", null, null, null, null, null, null);
+		Cursor cursor = db.rawQuery("select * from Province ", null);
 		if (cursor.moveToFirst()) {
 			do {
 				Province province = new Province();
 				province.setId(cursor.getInt(cursor.getColumnIndex("id")));
+				Log.d("province", Integer.toString(province.getId()));
 				province.setProvinceName(cursor.getString(cursor.getColumnIndex("province_name")));
-				province.setProvinceCode(cursor.getString(cursor.getColumnIndex("procince_code")));
+				Log.d("province", province.getProvinceName());
+				province.setProvinceCode(cursor.getString(cursor.getColumnIndex("province_code")));
+				Log.d("province", province.getProvinceCode());
 				list.add(province);
 			} while (cursor.moveToNext());
 		}
